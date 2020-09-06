@@ -735,24 +735,21 @@ export default class home extends Component {
                         </div>                          
                     </Content>
                     <Footer>
-                        Albe © 2020
-                        {'\u00A0'}|{'\u00A0'}
-                        Licenza:{'\u00A0'}
-                        <a href="https://creativecommons.org/licenses/by/4.0/deed.en" target="_blank"
-                           rel="noopener noreferrer">
-                            CC-BY-4.0
-                        </a>
-                        {'\u00A0'}|{'\u00A0'}
-                        Editore / Autore dataset Italia:{'\u00A0'}
-                        <a href="http://www.protezionecivile.gov.it/home" target="_blank" rel="noopener noreferrer">
-                            Dipartimento della Protezione Civile
-                        </a>
-                        {'\u00A0'}|{'\u00A0'}
-                        Editore / Autore dataset Mondo:{'\u00A0'}                        
-                        <a href="https://github.com/pomber/covid19" target="_blank" rel="noopener noreferrer">
-                            Pomber
-                        </a>
+                        <span>© 2020 by Albe | </span>
+                        <a href="https://creativecommons.org/licenses/by/4.0/deed.en" target="_blank" rel="noopener noreferrer">CC-BY-4.0</a>
                         
+
+                        <div className="right">
+                            Dataset COVID-19 Italia by{'\u00A0'}
+                            <a href="https://github.com/pcm-dpc/COVID-19" target="_blank" rel="noopener noreferrer">
+                                Dipartimento della Protezione Civile
+                            </a>
+                            {'\u00A0'}|{'\u00A0'}
+                            Dataset COVID-19 Mondo by{'\u00A0'}
+                            <a href="https://github.com/pomber/covid19" target="_blank" rel="noopener noreferrer">
+                                Pomber
+                            </a>
+                        </div>                        
                     </Footer>
                 </Layout>
             </div>
