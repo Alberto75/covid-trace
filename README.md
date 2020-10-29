@@ -9,7 +9,7 @@ Dataset COVID-19 World by [Pomber](https://github.com/pomber/covid19)
 To run the dashboard locally
 
 ###### Clone the repository:
-`git clone https://github.com/ffcabbar/react-covid-19-app`
+`git clone https://github.com/Alberto75/covid-trace.git`
 
 ###### Install dependencies:
 `npm i`
