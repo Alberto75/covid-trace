@@ -46,7 +46,7 @@ export async function getDataNational(giorno=0) {
         return axios.get(dataNationalUrl)
             .then(res => {
                 const obj = res.data;
-                result.push(obj.filter(obj => obj.data.includes(giorno))[0].dimessi_guariti, obj.filter(obj => obj.data.includes(giorno))[0].deceduti, obj.filter(obj => obj.data.includes(giorno))[0].totale_casi, obj.filter(obj => obj.data.includes(giorno))[0].totale_positivi, obj.filter(obj => obj.data.includes(giorno))[0].variazione_totale_positivi);
+                result.push(obj.filter(obj => obj.data.includes(giorno))[0].dimessi_guariti, obj.filter(obj => obj.data.includes(giorno))[0].deceduti, obj.filter(obj => obj.data.includes(giorno))[0].totale_casi, obj.filter(obj => obj.data.includes(giorno))[0].totale_positivi, obj.filter(obj => obj.data.includes(giorno))[0].variazione_totale_positivi, obj.filter(obj => obj.data.includes(giorno))[0].tamponi);
                 return result;
             }); 
     } else {
@@ -57,15 +57,17 @@ export async function getDataNational(giorno=0) {
                 let nuoviPositivi = [];   
                 let totale_positivi = [];  
                 let dimessi_guariti = [];  
-                let deceduti = [];                                 
+                let deceduti = [];
+                let tamponi = [];                                 
                 obj.forEach(record => {  
                     mese.push(record.data);  
                     nuoviPositivi.push(record.nuovi_positivi);  
                     totale_positivi.push(record.totale_positivi);  
                     dimessi_guariti.push(record.dimessi_guariti);  
                     deceduti.push(record.deceduti);                      
+                    tamponi.push(record.tamponi);                      
                 });                  
-                result.push(mese, nuoviPositivi, totale_positivi, dimessi_guariti, deceduti);
+                result.push(mese, nuoviPositivi, totale_positivi, dimessi_guariti, deceduti, tamponi);
                 return result;
             });        
     }

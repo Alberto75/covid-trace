@@ -62,7 +62,8 @@ export default class home extends Component {
                     totDeceduti: tot[1],
                     totCasi: tot[2],                    
                     totPositivi: tot[3],
-                    varPositivi: tot[4]
+                    varPositivi: tot[4],
+                    varTamponi: tot[5]
                 })
             });
 
@@ -73,7 +74,8 @@ export default class home extends Component {
                     totDecedutiPrev: tot[1],
                     totCasiPrev: tot[2],
                     totPositiviPrev: tot[3],
-                    varPositiviPrev: tot[4]
+                    varPositiviPrev: tot[4],
+                    varTamponiPrev: tot[5]
                 })
             });
 
@@ -188,7 +190,8 @@ export default class home extends Component {
                     totDeceduti: tot[1],
                     totCasi: tot[2],                    
                     totPositivi: tot[3],
-                    varPositivi: tot[4]
+                    varPositivi: tot[4],
+                    varTamponi: tot[5]
                 })
             });
 
@@ -201,7 +204,8 @@ export default class home extends Component {
                     totDecedutiPrev: tot[1],
                     totCasiPrev: tot[2],
                     totPositiviPrev: tot[3],
-                    varPositiviPrev: tot[4]
+                    varPositiviPrev: tot[4],
+                    varTamponiPrev: tot[5]
                 })
             });
         
@@ -353,7 +357,7 @@ export default class home extends Component {
             scales: {
               yAxes: [{
                 ticks: { // 
-                  min: 0, max: 30000, stepSize: 2000 },                                
+                  min: 0, max: 30000, stepSize: 5000 },                                
                 gridLines: {
                   color: "rgb(84, 86, 89)",
                   borderDash: [2, 2],
@@ -590,10 +594,19 @@ export default class home extends Component {
                                         <Statistic
                                             title="Totale casi"
                                             value={this.state.totCasi}
+                                            suffix={<div style={{textAlign: 'left'}}>
+                                                <p style={{marginBottom: '0.6em'}}> +{this.state.totCasi - this.state.totCasiPrev}</p> 
+                                                <p style={{color: '#7c878e', fontSize: '12px'}}>Su {this.state.varTamponi - this.state.varTamponiPrev} Tamponi</p>
+                                            </div>}
                                             valueStyle={{color: '#e60000', textAlign: 'center' }}
                                         />
                                         <Paragraph style={{textAlign: 'center'}}>
-                                            <span style={{color: '#e60000'}}>+{this.state.totCasi - this.state.totCasiPrev}</span>                                            
+                                        <Progress 
+                                                strokeLinecap='square' 
+                                                strokeWidth='15px'
+                                                strokeColor='#e60000' 
+                                                percent={((this.state.totCasi - this.state.totCasiPrev) / (this.state.varTamponi - this.state.varTamponiPrev) * 100).toFixed(2)} 
+                                            />
                                         </Paragraph>
                                     </Card>
                                 </Col>
