@@ -29,6 +29,42 @@ export async function getDataRegions(giorno) {
         });
 }
 
+export async function getTopRegions(valore) {
+    const {dataRegioonsLatestUrl} = globalConfig();
+    let result = [];
+    return axios.get(dataRegioonsLatestUrl)
+        .then(res => {
+            var obj = res.data;
+            let regione = [];  
+            let totale_valore = [];  
+            let bkColor = [];  
+            let bordColor = [];  
+
+            let sorted = obj.sort((a, b) => b.totale_positivi - a.totale_positivi);
+            const dates = sorted.slice(0,12)
+
+            dates.forEach(record => {  
+                regione.push(record.denominazione_regione); 
+                if (valore === 'positivi') {
+                    totale_valore.push(record.totale_positivi);
+                    bkColor.push('rgba(255, 170, 0, 0.2)')
+                    bordColor.push('rgba(255, 170, 0,1)')
+                } else if (valore === 'ricoverati') {
+                    totale_valore.push(record.totale_ospedalizzati);
+                    bkColor.push('rgba(230, 0, 0, 0.2)')
+                    bordColor.push('rgba(230, 0, 0, 1)')                    
+                } else if (valore === 'deceduti') {
+                    totale_valore.push(record.deceduti);
+                    bkColor.push('rgba(173, 173, 173, 0.2)')
+                    bordColor.push('rgba(173, 173, 173, 1)')                    
+                }
+                  
+            });                  
+            result.push(regione, totale_valore, bkColor, bordColor);
+            return result;            
+        });  
+}
+
 export async function getDataProvinces(giorno) {
     const {dataProvincesUrl} = globalConfig();
 

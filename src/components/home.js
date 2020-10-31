@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 // eslint-disable-next-line 
-import { Layout, Button, Input, Row, Col, Table, Tabs, Card, Statistic, BackTop, Typography, Divider, Progress, DatePicker, PageHeader } from 'antd';
-import { formatDate, getDataRegions, getDataProvinces, getDataNational, getCurrentTime, getPreviousDate, getDataNotes, getDataCountries } from "./helpers";
+import { Layout, Radio, Input, Row, Col, Table, Tabs, Card, Statistic, BackTop, Typography, Divider, Progress, DatePicker, PageHeader } from 'antd';
+import { formatDate, getDataRegions, getDataProvinces, getDataNational, getCurrentTime, getPreviousDate, getDataNotes, getDataCountries, getTopRegions } from "./helpers";
 
-import { Line } from 'react-chartjs-2';
+import { Line, Radar } from 'react-chartjs-2';
 import moment from 'moment';
 
 const { Content, Footer } = Layout;
@@ -37,6 +37,8 @@ export default class home extends Component {
             varPositiviPrev: 0,
             DataChart1: {},
             DataChart2: {},
+            DataChart3: {},
+            radarData: 'positivi',
         }
         this.handleChange = this.handleChange.bind(this);
     }
@@ -83,13 +85,33 @@ export default class home extends Component {
             .then(data => {
                 this.setState({
                     itemsRegions: data
+            })
+        });
+        
+        let radarData = 'positivi';
+        await getTopRegions(radarData)
+            .then(data => {
+                this.setState({
+                    DataChart3: {  
+                        labels: data[0],  
+                        datasets: [  
+                          {  
+                            label: 'Totale positivi',
+                            data: data[1],  
+                            backgroundColor: 'rgba(255, 170, 0, 0.2)',
+                            borderColor: 'rgba(255, 170, 0,1)',
+                            pointRadius: .5,
+                            borderWidth: 1.5,
+                          }  
+                        ]  
+                    }                     
                 })
             });
-        
+
         await getDataProvinces(today)
             .then(data => {
                 this.setState({
-                    itemsProvincies: data
+                    itemsProvincies: data                   
                 })
             }); 
 
@@ -107,13 +129,7 @@ export default class home extends Component {
                             borderWidth: 1.5,
                           }  
                         ]  
-                      }                  
-                })
-            });         
-            
-        await getDataNational()
-            .then(tot => {
-                this.setState({
+                    },
                     DataChart2: {  
                         labels: tot[0],  
                         datasets: [  
@@ -142,10 +158,10 @@ export default class home extends Component {
                                 borderWidth: 1.5,
                             }   
                         ]  
-                      }                  
+                    }                   
                 })
-            });               
-
+            });         
+            
         await getDataNotes(today)
             .then(data => {
                 this.setState({
@@ -222,9 +238,33 @@ export default class home extends Component {
                     itemsProvincies: data
                 })
             });        
-      }
+    }
+
+    handleDataChange(e) {
+        getTopRegions(e.target.value)
+            .then(data => {
+                this.setState({
+                    radarData: e.target.value,
+                    DataChart3: {  
+                        labels: data[0],  
+                        datasets: [  
+                        {  
+                            label: 'Totale ' + e.target.value,
+                            data: data[1],  
+                            backgroundColor: data[2],
+                            borderColor: data[3],
+                            pointRadius: .5,
+                            borderWidth: 1.5,
+                        }  
+                        ]  
+                    }                     
+                })
+            });
+
+    }
 
     render() {
+        
         const columnsRegions = [
             {
                 render: text => <span style={{color: 'white'}}>{text}</span>,
@@ -321,6 +361,7 @@ export default class home extends Component {
 
             // 
         ];
+
         const columnsProvincies = [
             {
                 title: 'Provincia',
@@ -352,12 +393,14 @@ export default class home extends Component {
                 sortDirections: ['descend', 'ascend']
             }
         ];         
+
         const legend = {display:false}
+
         const optionsChart1 = {
             scales: {
               yAxes: [{
                 ticks: { // 
-                  min: 0, max: 30000, stepSize: 5000 },                                
+                  min: 0, max: 35000, stepSize: 5000 },                                
                 gridLines: {
                   color: "rgb(84, 86, 89)",
                   borderDash: [2, 2],
@@ -381,7 +424,8 @@ export default class home extends Component {
                   }
                 }]
             }
-        }       
+        }     
+
         const optionsChart2 = {
             legend: {
                 display: true,
@@ -416,6 +460,31 @@ export default class home extends Component {
                 }]
             }
         } 
+
+        const optionsChart3 = {
+            //startAngle: 90,
+            legend: {
+                display:false
+            },
+            title: {
+              display: false
+            },
+            scale: {
+                angleLines: {
+                    color: 'rgb(84, 86, 89)', // lines radiating from the center
+                    borderDash: [2, 2], 
+                },
+                gridLines: {
+                    color: 'rgb(84, 86, 89)',
+                    borderDash: [2, 2],                 
+                  },                
+              ticks: {
+                callback: function() {return ""},
+                backdropColor: "rgba(0, 0, 0, 0)"
+              }
+            }
+        }
+
         const columnsNotes = [
             {
                 dataIndex: 'data',
@@ -684,11 +753,20 @@ export default class home extends Component {
                                             title={() => 'Note'}
                                             size="small"
                                             //rowKey="date"
-                                            scroll={{ y: 228 }} //456
+                                            scroll={{ y: 320 }} //456
                                         />
                                     </Card>
                                 </Col>
-                             
+                                <Col className="gutter-row" span={8}>
+                                    <Card className="card-wrapper" bordered={false} title={<span>12 Regioni con il maggior numero di {this.state.radarData}</span> }>
+                                        <Radio.Group value={this.state.radarData} onChange={this.handleDataChange.bind(this)} style={{ right: '0px' }}>
+                                            <Radio.Button value="positivi">Positivi</Radio.Button>
+                                            <Radio.Button value="ricoverati">Ricoverati</Radio.Button>
+                                            <Radio.Button value="deceduti">Deceduti</Radio.Button>
+                                        </Radio.Group>
+                                        <Radar data={this.state.DataChart3} options={optionsChart3}/>
+                                    </Card>
+                                </Col>                             
                             </Row>
                         </div>    
                         
