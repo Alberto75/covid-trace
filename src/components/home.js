@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // eslint-disable-next-line 
-import { Layout, Radio, Input, Row, Col, Table, Tabs, Card, Statistic, BackTop, Typography, Divider, Progress, DatePicker, PageHeader } from 'antd';
+import { Layout, Radio, Row, Col, Table, Tabs, Card, Statistic, BackTop, Typography, Divider, Progress, DatePicker, PageHeader } from 'antd';
 import { formatDate, getDataRegions, getDataProvinces, getDataNational, getCurrentTime, getPreviousDate, getDataNotes, getDataCountries, getTopRegions } from "./helpers";
 
 import { Line, Radar } from 'react-chartjs-2';
@@ -435,7 +435,7 @@ export default class home extends Component {
             scales: {
               yAxes: [{
                 ticks: { // 
-                  min: 0, max: 350000, stepSize: 50000 },                
+                  min: 0, max: 450000, stepSize: 50000 },                
                 gridLines: {
                   color: "rgb(84, 86, 89)",
                   borderDash: [2, 2],
