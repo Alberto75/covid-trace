@@ -826,7 +826,7 @@ export default class home extends Component {
                         </div>                          
                     </Content>
                     <Footer>
-                        <span>© 2020 by Albe | </span>
+                        <span>© 2020 by <a href="https://github.com/Alberto75" target="_blank" rel="noopener noreferrer">Albe</a> | </span>
                         <a href="https://creativecommons.org/licenses/by/4.0/deed.en" target="_blank" rel="noopener noreferrer">CC-BY-4.0</a>
                         
 
