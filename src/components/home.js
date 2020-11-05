@@ -40,6 +40,7 @@ export default class home extends Component {
             DataChart3: {},
             radarData: 'positivi',
         }
+        this.handleChange = this.handleChange.bind(this);
     }
 
     async componentDidMount() {
@@ -55,7 +56,7 @@ export default class home extends Component {
         }
 
         sessionStorage.setItem("DATIAGGIORNATIAL", formatDate(today));
-
+        
         await getDataNational(today)
             .then(tot => {
                 this.setState({
@@ -187,6 +188,56 @@ export default class home extends Component {
                 })
             });
             
+    }
+
+    handleChange(date, dateString) {
+        let today = dateString
+        let d = new Date();
+
+        if (d.getDate().toString() === date.format('D')) {
+            today = date.subtract(1, "days");
+            today = today.format("YYYY-MM-DD");
+        }
+
+        getDataNational(today)
+            .then(tot => {
+                this.setState({
+                    totDimessi: tot[0],
+                    totDeceduti: tot[1],
+                    totCasi: tot[2],                    
+                    totPositivi: tot[3],
+                    varPositivi: tot[4],
+                    varTamponi: tot[5]
+                })
+            });
+
+        let yesterday = date.subtract(1, "days").format("YYYY-MM-DD");
+
+        getDataNational(yesterday)
+            .then(tot => {
+                this.setState({
+                    totDimessiPrev: tot[0],
+                    totDecedutiPrev: tot[1],
+                    totCasiPrev: tot[2],
+                    totPositiviPrev: tot[3],
+                    varPositiviPrev: tot[4],
+                    varTamponiPrev: tot[5]
+                })
+            });
+        
+        getDataRegions(today)
+            .then(data => {
+                this.setState({
+                    itemsRegions: data
+                })
+            });
+        
+        getDataProvinces()
+            .then(data => {
+                this.setState({
+                    itemsProvincies: data
+                })
+            });        
     }
 
     handleDataChange(e) {
@@ -523,6 +574,11 @@ export default class home extends Component {
             // 
         ]; 
 
+        function disabledDate(current) {
+            // Can not select days before today and today
+            return current < moment('2020-02-25','YYYY-MM-DD') || current > moment().endOf('day');
+        }
+
         return (
             <div>
                 <BackTop />
@@ -532,7 +588,13 @@ export default class home extends Component {
                         title="DATI COVID-19"
                         subTitle={"Situazione Italia e Mondo"} 
                         extra={[
-                            <span>Dati aggiornati al {sessionStorage.getItem("DATIAGGIORNATIAL")}</span>,
+                            <span>Dati aggiornati al </span>,
+                            <DatePicker 
+                                defaultValue={moment(this.state.today,'YYYY-MM-DD')}
+                                format={'YYYY-MM-DD'}
+                                onChange={this.handleChange} 
+                                disabledDate={disabledDate}
+                                />,
                         ]}                            
                     />
                     <Content className="site-layout" style={{ marginTop: 75 }}>
@@ -780,6 +842,7 @@ export default class home extends Component {
                             </a>
                         </div>                        
                     </Footer>
+                
                 </Layout>
             </div>
         );
