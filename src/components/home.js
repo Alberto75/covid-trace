@@ -40,7 +40,6 @@ export default class home extends Component {
             DataChart3: {},
             radarData: 'positivi',
         }
-        this.handleChange = this.handleChange.bind(this);
     }
 
     async componentDidMount() {
@@ -188,56 +187,6 @@ export default class home extends Component {
                 })
             });
             
-    }
-
-    handleChange(date, dateString) {
-        let today = dateString
-        let d = new Date();
-
-        if (d.getDate().toString() === date.format('D')) {
-            today = date.subtract(1, "days");
-            today = today.format("YYYY-MM-DD");
-        }
-
-        getDataNational(today)
-            .then(tot => {
-                this.setState({
-                    totDimessi: tot[0],
-                    totDeceduti: tot[1],
-                    totCasi: tot[2],                    
-                    totPositivi: tot[3],
-                    varPositivi: tot[4],
-                    varTamponi: tot[5]
-                })
-            });
-
-        let yesterday = date.subtract(1, "days").format("YYYY-MM-DD");
-
-        getDataNational(yesterday)
-            .then(tot => {
-                this.setState({
-                    totDimessiPrev: tot[0],
-                    totDecedutiPrev: tot[1],
-                    totCasiPrev: tot[2],
-                    totPositiviPrev: tot[3],
-                    varPositiviPrev: tot[4],
-                    varTamponiPrev: tot[5]
-                })
-            });
-        
-        getDataRegions(today)
-            .then(data => {
-                this.setState({
-                    itemsRegions: data
-                })
-            });
-        
-        getDataProvinces()
-            .then(data => {
-                this.setState({
-                    itemsProvincies: data
-                })
-            });        
     }
 
     handleDataChange(e) {
@@ -400,7 +349,7 @@ export default class home extends Component {
             scales: {
               yAxes: [{
                 ticks: { // 
-                  min: 0, max: 35000, stepSize: 5000 },                                
+                  min: 0, max: 45000, stepSize: 5000 },                                
                 gridLines: {
                   color: "rgb(84, 86, 89)",
                   borderDash: [2, 2],
@@ -435,7 +384,7 @@ export default class home extends Component {
             scales: {
               yAxes: [{
                 ticks: { // 
-                  min: 0, max: 450000, stepSize: 50000 },                
+                  min: 0, max: 550000, stepSize: 50000 },                
                 gridLines: {
                   color: "rgb(84, 86, 89)",
                   borderDash: [2, 2],
@@ -574,11 +523,6 @@ export default class home extends Component {
             // 
         ]; 
 
-        function disabledDate(current) {
-            // Can not select days before today and today
-            return current && current > moment().endOf('day');
-        }
-
         return (
             <div>
                 <BackTop />
@@ -588,13 +532,7 @@ export default class home extends Component {
                         title="DATI COVID-19"
                         subTitle={"Situazione Italia e Mondo"} 
                         extra={[
-                            <span>Dati aggiornati al </span>,
-                            <DatePicker 
-                                defaultValue={moment(sessionStorage.getItem("DATIAGGIORNATIAL"),'DD/MM/YYYY')}
-                                format={'YYYY-MM-DD'}
-                                onChange={this.handleChange} 
-                                disabledDate={disabledDate}
-                                />,
+                            <span>Dati aggiornati al {sessionStorage.getItem("DATIAGGIORNATIAL")}</span>,
                         ]}                            
                     />
                     <Content className="site-layout" style={{ marginTop: 75 }}>
