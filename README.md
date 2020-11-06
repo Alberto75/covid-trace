@@ -18,3 +18,6 @@ To run the dashboard locally
 `npm start`
 
 Open http://localhost:3000 to view it in the browser.
+
+###### Live
+https://covid-trace-6bef4.web.app/
