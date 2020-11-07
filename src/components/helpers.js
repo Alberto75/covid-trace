@@ -39,14 +39,15 @@ export async function getTopRegions(valore) {
             let totale_valore = [];  
             let bkColor = [];  
             let bordColor = [];  
-            let sorted;
-            let dates;
+            var sorted;
+            var dates;
+
             if (valore === 'positivi') {
                 sorted = obj.sort((a, b) => b.totale_positivi - a.totale_positivi);
                 dates = sorted.slice(0,12)
             } else if (valore === 'ricoverati') {
                 sorted = obj.sort((a, b) => b.totale_ospedalizzati - a.totale_ospedalizzati);
-                dates = sorted.slice(0,12)                   
+                dates = sorted.slice(0,10)                   
             } else if (valore === 'deceduti') {
                 sorted = obj.sort((a, b) => b.deceduti - a.deceduti);
                 dates = sorted.slice(0,12)                 
