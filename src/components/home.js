@@ -435,7 +435,7 @@ export default class home extends Component {
             scales: {
               yAxes: [{
                 ticks: { // 
-                  min: 0, max: 550000, stepSize: 50000 },                
+                  min: 0, max: 700000, stepSize: 150000 },                
                 gridLines: {
                   color: "rgb(84, 86, 89)",
                   borderDash: [2, 2],
@@ -664,7 +664,7 @@ export default class home extends Component {
                                             title="Totale casi"
                                             value={this.state.totCasi}
                                             suffix={<div style={{textAlign: 'left'}}>
-                                                <p style={{marginBottom: '0.6em'}}> +{this.state.totCasi - this.state.totCasiPrev}</p> 
+                                                <p style={{marginBottom: '0.2em'}}> +{this.state.totCasi - this.state.totCasiPrev}</p> 
                                                 <p style={{color: '#7c878e', fontSize: '12px'}}>Su {this.state.varTamponi - this.state.varTamponiPrev} Tamponi</p>
                                             </div>}
                                             valueStyle={{color: '#e60000', textAlign: 'center' }}
