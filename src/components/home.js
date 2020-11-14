@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Layout, Radio, Row, Col, Table, Tabs, Card, Statistic, BackTop, Typography, Divider, Progress, DatePicker, PageHeader } from 'antd';
 import { formatDate, getDataRegions, getDataProvinces, getDataNational, getCurrentTime, getPreviousDate, getDataNotes, getDataCountries, getTopRegions } from "./helpers";
 
-import { Line, Radar } from 'react-chartjs-2';
+import { Line, Radar, Bar } from 'react-chartjs-2';
 import moment from 'moment';
 
 const { Content, Footer } = Layout;
@@ -38,6 +38,7 @@ export default class home extends Component {
             DataChart1: {},
             DataChart2: {},
             DataChart3: {},
+            DataChart4: {},
             radarData: 'positivi',
         }
         this.handleChange = this.handleChange.bind(this);
@@ -87,7 +88,30 @@ export default class home extends Component {
                     itemsRegions: data
             })
         });
-        
+
+        await getDataRegions()
+            .then(tot => {
+                this.setState({
+                    DataChart4: {  
+                        labels: tot[0],  
+                        datasets: [  
+                            //denominazione_regione, ricoverati_con_sintomi, terapia_intensiva, totale_ospedalizzati, isolamento_domiciliare, totale_positivi
+                       
+                            {  
+                                label: 'Ricoverati con sintomi',
+                                data: tot[1],  
+                                backgroundColor: '#ffaa00',
+                            },
+                          {  
+                            label: 'Terapia intensiva',
+                            data: tot[2],  
+                            backgroundColor: '#e60000',
+                          }                          
+                        ]  
+                    }                   
+                })
+            });  
+
         let radarData = 'positivi';
         await getTopRegions(radarData)
             .then(data => {
@@ -395,7 +419,7 @@ export default class home extends Component {
         ];         
 
         const legend = {display:false}
-
+        
         const optionsChart1 = {
             scales: {
               yAxes: [{
@@ -482,6 +506,17 @@ export default class home extends Component {
                 callback: function() {return ""},
                 backdropColor: "rgba(0, 0, 0, 0)"
               }
+            }
+        }
+
+        const optionsChart4 = {
+            scales: {
+                xAxes: [{
+                    stacked: true
+                }],
+                yAxes: [{
+                    stacked: true
+                }]
             }
         }
 
@@ -700,7 +735,7 @@ export default class home extends Component {
                                                     bordered
                                                     size="middle"
                                                     rowKey="codice_regione"
-                                                    scroll={{ y: 203 }} //456
+                                                    scroll={{ y: 237 }} //456
                                                 />
                                             </TabPane>
                                             <TabPane tab="PROVINCE" key="2">
@@ -716,7 +751,7 @@ export default class home extends Component {
                                                     bordered
                                                     size="middle"
                                                     rowKey="codice_provincia"
-                                                    scroll={{ y: 203 }}
+                                                    scroll={{ y: 257 }}
                                                 />
                                             </TabPane>
                                         </Tabs>
@@ -753,7 +788,7 @@ export default class home extends Component {
                                             title={() => 'Note'}
                                             size="small"
                                             //rowKey="date"
-                                            scroll={{ y: 320 }} //456
+                                            scroll={{ y: 355 }} //456
                                         />
                                     </Card>
                                 </Col>
@@ -766,7 +801,12 @@ export default class home extends Component {
                                         </Radio.Group>
                                         <Radar data={this.state.DataChart3} options={optionsChart3}/>
                                     </Card>
-                                </Col>                             
+                                </Col>    
+                                <Col className="gutter-row" span={8}>
+                                    <Card className="card-wrapper" bordered={false} title="Dettaglio ospedalizzati per le 12 Regioni con il maggior numero di positivi">
+                                        <Bar data={this.state.DataChart4} options={optionsChart4}/>
+                                    </Card>
+                                </Col>                                  
                             </Row>
                         </div>    
                         

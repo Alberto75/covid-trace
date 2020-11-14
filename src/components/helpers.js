@@ -19,20 +19,50 @@ export function formatDate(date) {
     return (d.getDate() < 10 ? '0' + d.getDate() : '' + d.getDate()) + '/' + (month < 10 ? '0' + month : '' + month) + '/' + d.getFullYear();
 }
 
-export async function getDataRegions(giorno) {
+export async function getDataRegions(giorno=0) {
     const {dataRegionsUrl} = globalConfig();
+    let result = [];
+    if (giorno !== 0) {
+        return axios.get(dataRegionsUrl)
+            .then(res => {
+                const obj = res.data;
+                return obj.filter(obj => obj.data.includes(giorno));
+            });
+    } else {
+        const {dataRegionsLatestUrl} = globalConfig();
+        return axios.get(dataRegionsLatestUrl)
+            .then(res => {
+                const obj = res.data;
+                let ricoverati_con_sintomi = [];   
+                let terapia_intensiva = [];  
+                let totale_ospedalizzati = [];  
+                let isolamento_domiciliare = [];
+                let totale_positivi = [];  
+                let denominazione_regione = [];
+                var sorted;
+                var dates;
 
-    return axios.get(dataRegionsUrl)
-        .then(res => {
-            const obj = res.data;
-            return obj.filter(obj => obj.data.includes(giorno));
-        });
+                sorted = obj.sort((a, b) => b.totale_positivi - a.totale_positivi);
+                dates = sorted.slice(0,12)
+
+                dates.forEach(record => {  
+                    denominazione_regione.push(record.denominazione_regione); 
+                    ricoverati_con_sintomi.push(record.ricoverati_con_sintomi);  
+                    terapia_intensiva.push(record.terapia_intensiva);  
+                    totale_ospedalizzati.push(record.totale_ospedalizzati);  
+                    isolamento_domiciliare.push(record.isolamento_domiciliare);                      
+                    totale_positivi.push(record.totale_positivi);                      
+                });                  
+                result.push(denominazione_regione, ricoverati_con_sintomi, terapia_intensiva, totale_ospedalizzati, isolamento_domiciliare, totale_positivi);
+                return result;
+            });        
+    }        
 }
 
 export async function getTopRegions(valore) {
-    const {dataRegioonsLatestUrl} = globalConfig();
+    const {dataRegionsLatestUrl} = globalConfig();
     let result = [];
-    return axios.get(dataRegioonsLatestUrl)
+    return axios.get(dataRegionsLatestUrl)
         .then(res => {
             var obj = res.data;
             let regione = [];  
