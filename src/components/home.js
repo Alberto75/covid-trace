@@ -424,7 +424,7 @@ export default class home extends Component {
             scales: {
               yAxes: [{
                 ticks: { // 
-                  min: 0, max: 45000, stepSize: 5000 },                                
+                  min: 0, stepSize: 5000 },                                
                 gridLines: {
                   color: "rgb(84, 86, 89)",
                   borderDash: [2, 2],
@@ -459,7 +459,7 @@ export default class home extends Component {
             scales: {
               yAxes: [{
                 ticks: { // 
-                  min: 0, max: 700000, stepSize: 150000 },                
+                  min: 0, stepSize: 150000 },                
                 gridLines: {
                   color: "rgb(84, 86, 89)",
                   borderDash: [2, 2],
