@@ -644,7 +644,7 @@ export default class home extends Component {
                                             className="card-wrapper-statistic"
                                             title="Totale positivi"
                                             value={this.state.totPositivi}
-                                            suffix={<span> +{this.state.varPositivi}</span> }
+                                            suffix={<span> {this.state.varPositivi > 0 ? '+' + this.state.varPositivi : this.state.varPositivi }</span> }
                                             valueStyle={{color: '#ffaa00', textAlign: 'center'}}
                                         />
                                         <Paragraph style={{textAlign: 'center'}}>
@@ -662,7 +662,7 @@ export default class home extends Component {
                                         <Statistic
                                             title="Deceduti"
                                             value={this.state.totDeceduti}
-                                            suffix={<span> +{this.state.totDeceduti - this.state.totDecedutiPrev}</span> }
+                                            suffix={<span> {(this.state.totDeceduti - this.state.totDecedutiPrev) > 0 ? '+' + (this.state.totDeceduti - this.state.totDecedutiPrev) : (this.state.totDeceduti - this.state.totDecedutiPrev) }</span> }
                                             valueStyle={{color: '#adadad', textAlign: 'center' }}
                                         />
                                         <Paragraph style={{textAlign: 'center'}}>
@@ -680,7 +680,7 @@ export default class home extends Component {
                                         <Statistic
                                             title="Dimessi/Guariti"
                                             value={this.state.totDimessi}
-                                            suffix={<span> +{this.state.totDimessi - this.state.totDimessiPrev}</span> }
+                                            suffix={<span> {(this.state.totDimessi - this.state.totDimessiPrev) > 0 ? '+' + (this.state.totDimessi - this.state.totDimessiPrev) : (this.state.totDimessi - this.state.totDimessiPrev) }</span> }
                                             valueStyle={{color: '#4ce600', textAlign: 'center' }}
                                         />
                                         <Paragraph style={{textAlign: 'center'}}>
